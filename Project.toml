@@ -3,6 +3,10 @@ uuid = "bd2a9720-0cf4-11ea-3d1a-97ce67aae37d"
 authors = ["miRoox"]
 version = "0.1.0"
 
+[deps]
+LightField = "3b5662e0-f540-11e9-3395-2977d055c5c0"
+OpticalTransform = "5980e7c0-f55b-11e9-0dcc-0d626d4196ab"
+
 [compat]
 julia = "1.1.1"
 
