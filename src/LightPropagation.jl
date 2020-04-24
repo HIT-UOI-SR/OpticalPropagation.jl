@@ -1,6 +1,6 @@
 module LightPropagation
 
-using OpticalTransform
+using FFTW
 
 export
     angular_spectrum,
