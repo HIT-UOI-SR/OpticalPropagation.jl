@@ -6,11 +6,11 @@ makedocs(;
     pages=[
         "Home" => "index.md",
     ],
-    repo="https://github.com/miRoox/LightPropagation.jl/blob/{commit}{path}#L{line}",
+    repo="https://github.com/HIT-UOI-SR/LightPropagation.jl/blob/{commit}{path}#L{line}",
     sitename="LightPropagation.jl",
     authors="miRoox",
 )
 
 deploydocs(;
-    repo="github.com/miRoox/LightPropagation.jl",
+    repo="github.com/HIT-UOI-SR/LightPropagation.jl",
 )
