@@ -10,15 +10,15 @@ jobs:
   allow_failures:
     - julia: nightly
   fast_finish: true
-notifications:
-  email: false
-jobs:
   include:
     - stage: Documentation
       julia: 1.1
       script: julia --project=docs -e '
-          using Pkg;
-          Pkg.develop(PackageSpec(path=pwd()));
-          Pkg.instantiate();
-          include("docs/make.jl");'
+        using Pkg;
+        Pkg.develop(PackageSpec(path=pwd()));
+        Pkg.instantiate();
+        include("docs/make.jl");'
       after_success: skip
+notifications:
+  email: false
+
