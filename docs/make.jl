@@ -1,16 +1,16 @@
-using Documenter, LightPropagation
+using Documenter, OpticalPropagation
 
 makedocs(;
-    modules=[LightPropagation],
+    modules=[OpticalPropagation],
     format=Documenter.HTML(assets=String[]),
     pages=[
         "Home" => "index.md",
     ],
-    repo="https://github.com/HIT-UOI-SR/LightPropagation.jl/blob/{commit}{path}#L{line}",
-    sitename="LightPropagation.jl",
+    repo="https://github.com/HIT-UOI-SR/OpticalPropagation.jl/blob/{commit}{path}#L{line}",
+    sitename="OpticalPropagation.jl",
     authors="miRoox",
 )
 
 deploydocs(;
-    repo="github.com/HIT-UOI-SR/LightPropagation.jl",
+    repo="github.com/HIT-UOI-SR/OpticalPropagation.jl",
 )

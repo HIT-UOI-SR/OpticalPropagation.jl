@@ -1,8 +1,8 @@
-# LightPropagation.jl
+# OpticalPropagation.jl
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [LightPropagation]
+Modules = [OpticalPropagation]
 ```

@@ -1,4 +1,4 @@
-module LightPropagation
+module OpticalPropagation
 
 using FFTW
 

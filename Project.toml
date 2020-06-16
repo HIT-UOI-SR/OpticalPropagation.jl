@@ -1,4 +1,4 @@
-name = "LightPropagation"
+name = "OpticalPropagation"
 uuid = "bd2a9720-0cf4-11ea-3d1a-97ce67aae37d"
 authors = ["miRoox"]
 version = "0.1.0"
@@ -7,8 +7,8 @@ version = "0.1.0"
 FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
 
 [compat]
-julia = "1.1"
 FFTW = "1"
+julia = "1.1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

@@ -1,6 +1,6 @@
-using LightPropagation
+using OpticalPropagation
 using Test
 
-@testset "LightPropagation.jl" begin
+@testset "OpticalPropagation.jl" begin
     # Write your own tests here.
 end
