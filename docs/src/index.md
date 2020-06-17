@@ -1,5 +1,7 @@
 # OpticalPropagation.jl
 
+A package of useful optical propagation methods.
+
 ```@index
 ```
 

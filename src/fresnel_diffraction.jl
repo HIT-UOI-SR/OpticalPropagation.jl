@@ -2,6 +2,18 @@
     fresnel_diffraction_double(Uin, d, λ, lx, ly)
 
 calculate the propagation light field based on the Fresnel diffraction with double Fourier transform.
+
+## Parameters
+
+- `Uin::AbstractArray{<:Number,2}`: Complex array of input complex amplitude.
+- `d::Real`: Distance to propagate in metres.
+- `λ::Real`: Wavelength of light to propagate.
+- `lx::Real`: The physical size of the input data along the x-axis.
+- `ly::Real`: The physical size of the input data along the y-axis.
+
+## Returns
+
+- `::Array{<:Number,2}`: Complex amplitude data after propagation.
 """
 function fresnel_diffraction_double(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
     tf = (u, v) -> exp(2im*pi*d/λ)*exp(-im*pi*d/λ*(u^2+v^2))
@@ -14,6 +26,22 @@ end
     fresnel_diffraction_single(Uin, d, λ, lx, ly)
 
 calculate the propagation light field based on the Fresnel diffraction with single Fourier transform.
+
+## Parameters
+
+- `Uin::AbstractArray{<:Number,2}`: Complex array of input complex amplitude.
+- `d::Real`: Distance to propagate in metres.
+- `λ::Real`: Wavelength of light to propagate.
+- `lx::Real`: The physical size of the input data along the x-axis.
+- `ly::Real`: The physical size of the input data along the y-axis.
+
+## Returns:
+
+    (Uout, (lxo, lyo))
+
+- `Uout::Array{<:Number,2}`: Complex amplitude data after propagation.
+- `lxo::Real`: The physical size of the diffraction data along the x-axis.
+- `lyo::Real`: The physical size of the diffraction data along the y-axis.
 """
 function fresnel_diffraction_single(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
     qp = (x, y) -> exp(im*pi/d/λ*(x^2+y^2))
