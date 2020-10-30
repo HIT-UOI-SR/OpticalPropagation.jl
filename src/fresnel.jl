@@ -23,6 +23,25 @@ function fresnel2(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, l
 end
 
 """
+    fresnel2(Uin, d)
+
+calculate the propagation light field based on the Fresnel diffraction with double Fourier transform.
+
+## Parameters
+
+- `Uin::MonoLightField2D`: Light field data in input plane.
+- `d::Real`: Distance to propagate.
+
+## Returns
+
+- `::MonoLightField2D`: Light field data after propagation.
+"""
+function fresnel2(Uin::MonoLightField2D, d::Real)
+    Uout = fresnel2(Uin.distribution_data, uval(d), uval(Uin.wavelength), (uval.(Uin.wavelength))...)
+    MonoLightField2D(Uin, distribution_data=Uout)
+end
+
+"""
     fresnel1(Uin, d, λ, lx, ly)
 
 calculate the propagation light field based on the Fresnel diffraction with single Fourier transform.
@@ -53,4 +72,23 @@ function fresnel1(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, l
     (uo, vo) = (-n/2+1:n/2,-m/2+1:m/2)./(lxo,lyo).*λ
     Uout = amp.*qp.(u', v).*exp(2im*pi*d/λ).*dx.*dy./(im*λ*d)
     (Uout, (lxo, lyo))
+end
+
+"""
+    fresnel1(Uin, d)
+
+calculate the propagation light field based on the Fresnel diffraction with single Fourier transform.
+
+## Parameters
+
+- `Uin::MonoLightField2D`: Light field data in input plane.
+- `d::Real`: Distance to propagate.
+
+## Returns
+
+- `::MonoLightField2D`: Light field data after propagation.
+"""
+function fresnel1(Uin::MonoLightField2D, d::Real)
+    (Uout, Lout) = fresnel1(Uin.distribution_data, uval(d), uval(Uin.wavelength), (uval.(Uin.wavelength))...)
+    MonoLightField2D(Uin, distribution_data=Uout, physical_size=Lout)
 end
