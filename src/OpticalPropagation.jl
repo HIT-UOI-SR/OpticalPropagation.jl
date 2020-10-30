@@ -13,7 +13,7 @@ export
     fresnel_diffraction_double,
     fresnel_diffraction_single
 
-include("LightField2D.jl")
+include("types.jl")
 include("angular_spectrum.jl")
 include("fresnel_diffraction.jl")
 
