@@ -1,5 +1,5 @@
 """
-    angular_spectrum(Uin, d, λ, lx, ly)
+    angularspectrum(Uin, d, λ, lx, ly)
 
 calculate the propagation light field based on the angular spectrum.
 
@@ -15,7 +15,7 @@ calculate the propagation light field based on the angular spectrum.
 
 - `::Array{<:Number,2}`: Complex amplitude data after propagation.
 """
-function angular_spectrum(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
+function angularspectrum(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
     tf = (u, v) -> 1-u^2-v^2>=0 ? exp(2im*pi*d/λ*sqrt(1-u^2-v^2)) : 0
     (n, m) = size(Uin)
     (u, v) = (-n/2+1:n/2,-m/2+1:m/2)./(lx,ly).*λ
@@ -24,7 +24,7 @@ end
 
 
 """
-    angular_spectrum(Uin, d)
+    angularspectrum(Uin, d)
 
 calculate the propagation light field based on the angular spectrum.
 
@@ -37,7 +37,7 @@ calculate the propagation light field based on the angular spectrum.
 
 - `::MonoLightField2D`: Light field data after propagation.
 """
-function angular_spectrum(Uin::MonoLightField2D, d::Unitful.Length)
-    Uout = angular_spectrum(Uin.distribution_data, uval(d), uval(Uin.wavelength), (uval.(Uin.physical_size))...)
+function angularspectrum(Uin::MonoLightField2D, d::Unitful.Length)
+    Uout = angularspectrum(Uin.distribution_data, uval(d), uval(Uin.wavelength), (uval.(Uin.physical_size))...)
     MonoLightField2D(Uin, distribution_data=Uout)
 end

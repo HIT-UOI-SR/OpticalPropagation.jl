@@ -1,5 +1,5 @@
 """
-    fresnel_diffraction_double(Uin, d, λ, lx, ly)
+    fresnel2(Uin, d, λ, lx, ly)
 
 calculate the propagation light field based on the Fresnel diffraction with double Fourier transform.
 
@@ -15,7 +15,7 @@ calculate the propagation light field based on the Fresnel diffraction with doub
 
 - `::Array{<:Number,2}`: Complex amplitude data after propagation.
 """
-function fresnel_diffraction_double(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
+function fresnel2(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
     tf = (u, v) -> exp(2im*pi*d/λ)*exp(-im*pi*d/λ*(u^2+v^2))
     (n, m) = size(Uin)
     (u, v) = (-n/2+1:n/2,-m/2+1:m/2)./(lx,ly).*λ
@@ -23,7 +23,7 @@ function fresnel_diffraction_double(Uin::AbstractArray{<:Number,2}, d::Real, λ:
 end
 
 """
-    fresnel_diffraction_single(Uin, d, λ, lx, ly)
+    fresnel1(Uin, d, λ, lx, ly)
 
 calculate the propagation light field based on the Fresnel diffraction with single Fourier transform.
 
@@ -43,7 +43,7 @@ calculate the propagation light field based on the Fresnel diffraction with sing
 - `lxo::Real`: The physical size of the diffraction data along the x-axis.
 - `lyo::Real`: The physical size of the diffraction data along the y-axis.
 """
-function fresnel_diffraction_single(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
+function fresnel1(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
     qp = (x, y) -> exp(im*pi/d/λ*(x^2+y^2))
     (n, m) = size(Uin)
     (dx, dy) = (lx, ly)./(n, m)

@@ -9,13 +9,13 @@ import Base:
 export
     AbstractLightField2D,
     MonoLightField2D,
-    angular_spectrum,
-    fresnel_diffraction_double,
-    fresnel_diffraction_single
+    angularspectrum,
+    fresnel2,
+    fresnel1
 
 include("types.jl")
-include("angular_spectrum.jl")
-include("fresnel_diffraction.jl")
+include("angularspectrum.jl")
+include("fresnel.jl")
 include("utils.jl")
 
 end # module
