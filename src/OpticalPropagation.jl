@@ -16,5 +16,6 @@ export
 include("types.jl")
 include("angular_spectrum.jl")
 include("fresnel_diffraction.jl")
+include("utils.jl")
 
 end # module
