@@ -23,18 +23,9 @@ function fresnel2(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, l
 end
 
 """
-    fresnel2(Uin, d)
+    fresnel2(Uin::MonoLightField2D, d::Unitful.Length) -> MonoLightField2D
 
-calculate the propagation light field based on the Fresnel diffraction with double Fourier transform.
-
-## Arguments
-
-- `Uin::MonoLightField2D`: Light field data in input plane.
-- `d::Real`: Distance to propagate.
-
-## Returns
-
-- `::MonoLightField2D`: Light field data after propagation.
+calculate the propagation light field for [`MonoLightField2D`](@ref) based on the Fresnel diffraction with double Fourier transform.
 """
 function fresnel2(Uin::MonoLightField2D, d::Unitful.Length)
     Uout = fresnel2(Uin.data, uval(d), uval(Uin.wavelength), (uval.(Uin.size))...)
@@ -75,18 +66,9 @@ function fresnel1(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, l
 end
 
 """
-    fresnel1(Uin, d)
+    fresnel1(Uin::MonoLightField2D, d::Real) -> MonoLightField2D
 
-calculate the propagation light field based on the Fresnel diffraction with single Fourier transform.
-
-## Arguments
-
-- `Uin::MonoLightField2D`: Light field data in input plane.
-- `d::Real`: Distance to propagate.
-
-## Returns
-
-- `::MonoLightField2D`: Light field data after propagation.
+calculate the propagation light field for [`MonoLightField2D`](@ref) based on the Fresnel diffraction with single Fourier transform.
 """
 function fresnel1(Uin::MonoLightField2D, d::Unitful.Length)
     (Uout, Lout) = fresnel1(Uin.data, uval(d), uval(Uin.wavelength), (uval.(Uin.size))...)

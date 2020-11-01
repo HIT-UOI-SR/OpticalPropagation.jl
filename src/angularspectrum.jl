@@ -24,18 +24,9 @@ end
 
 
 """
-    angularspectrum(Uin, d)
+    angularspectrum(Uin::MonoLightField2D, d::Unitful.Length) -> MonoLightField2D
 
-calculate the propagation light field based on the angular spectrum.
-
-## Arguments
-
-- `Uin::MonoLightField2D`: Light field data in input plane.
-- `d::Unitful.Length`: Distance to propagate.
-
-## Returns
-
-- `::MonoLightField2D`: Light field data after propagation.
+calculate the propagation light field for [`MonoLightField2D`](@ref) based on the angular spectrum.
 """
 function angularspectrum(Uin::MonoLightField2D, d::Unitful.Length)
     Uout = angularspectrum(Uin.data, uval(d), uval(Uin.wavelength), (uval.(Uin.size))...)
