@@ -13,7 +13,7 @@ export
     fresnel2,
     fresnel1
 
-include("types.jl")
+include("lightfield2d.jl")
 include("angularspectrum.jl")
 include("fresnel.jl")
 include("utils.jl")
