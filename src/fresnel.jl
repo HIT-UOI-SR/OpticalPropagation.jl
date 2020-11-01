@@ -36,7 +36,7 @@ calculate the propagation light field based on the Fresnel diffraction with doub
 
 - `::MonoLightField2D`: Light field data after propagation.
 """
-function fresnel2(Uin::MonoLightField2D, d::Real)
+function fresnel2(Uin::MonoLightField2D, d::Unitful.Length)
     Uout = fresnel2(Uin.data, uval(d), uval(Uin.wavelength), (uval.(Uin.size))...)
     MonoLightField2D(Uin, data=Uout)
 end
@@ -88,7 +88,7 @@ calculate the propagation light field based on the Fresnel diffraction with sing
 
 - `::MonoLightField2D`: Light field data after propagation.
 """
-function fresnel1(Uin::MonoLightField2D, d::Real)
+function fresnel1(Uin::MonoLightField2D, d::Unitful.Length)
     (Uout, Lout) = fresnel1(Uin.data, uval(d), uval(Uin.wavelength), (uval.(Uin.size))...)
     MonoLightField2D(Uin, data=Uout, size=Lout)
 end
