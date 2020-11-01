@@ -3,7 +3,7 @@
 
 calculate the propagation light field based on the angular spectrum.
 
-## Parameters
+## Arguments
 
 - `Uin::AbstractArray{<:Number,2}`: Complex array of input complex amplitude.
 - `d::Real`: Distance to propagate in metres.
@@ -28,7 +28,7 @@ end
 
 calculate the propagation light field based on the angular spectrum.
 
-## Parameters
+## Arguments
 
 - `Uin::MonoLightField2D`: Light field data in input plane.
 - `d::Unitful.Length`: Distance to propagate.

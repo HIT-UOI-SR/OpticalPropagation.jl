@@ -3,7 +3,7 @@
 
 calculate the propagation light field based on the Fresnel diffraction with double Fourier transform.
 
-## Parameters
+## Arguments
 
 - `Uin::AbstractArray{<:Number,2}`: Complex array of input complex amplitude.
 - `d::Real`: Distance to propagate in metres.
@@ -27,7 +27,7 @@ end
 
 calculate the propagation light field based on the Fresnel diffraction with double Fourier transform.
 
-## Parameters
+## Arguments
 
 - `Uin::MonoLightField2D`: Light field data in input plane.
 - `d::Real`: Distance to propagate.
@@ -46,7 +46,7 @@ end
 
 calculate the propagation light field based on the Fresnel diffraction with single Fourier transform.
 
-## Parameters
+## Arguments
 
 - `Uin::AbstractArray{<:Number,2}`: Complex array of input complex amplitude.
 - `d::Real`: Distance to propagate in metres.
@@ -54,7 +54,7 @@ calculate the propagation light field based on the Fresnel diffraction with sing
 - `lx::Real`: The physical size of the input data along the x-axis.
 - `ly::Real`: The physical size of the input data along the y-axis.
 
-## Returns:
+## Returns
 
     (Uout, (lxo, lyo))
 
@@ -79,7 +79,7 @@ end
 
 calculate the propagation light field based on the Fresnel diffraction with single Fourier transform.
 
-## Parameters
+## Arguments
 
 - `Uin::MonoLightField2D`: Light field data in input plane.
 - `d::Real`: Distance to propagate.
