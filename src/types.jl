@@ -48,16 +48,24 @@ function MonoLightField2D(x::MonoLightField2D; kwargs...)
     MonoLightField2D(dist_data,wavelength=wavelen,physical_size=phy_size)
 end
 
-Base.show(io::IO, x::MonoLightField2D) =
-    print(io,"MonoLightField2D($(x.distribution_data), wavelength=$(x.wavelength), physical_size=$(x.physical_size))")
+function Base.show(io::IO, x::MonoLightField2D)
+    print(io, "MonoLightField2D(")
+    show(io, x.distribution_data)
+    print(io, ", wavelength=")
+    show(io, x.wavelength)
+    print(io, ", physical_size=")
+    show(io, x.physical_size)
+    print(io, ")")
+end
 
-function Base.show(io::IO, ::MIME"text/plain", x::MonoLightField2D)
-    print(io,
-    "MonoLightField2D:
-    wavelength: $(x.wavelength)
-    physical size: $(x.physical_size)
-    distribution data:\n")
-    show(io,MIME("text/plain"),x.distribution_data)
+function Base.show(io::IO, mime::MIME"text/plain", x::MonoLightField2D)
+    print(io,"MonoLightField2D:")
+    print(io,"\n    wavelength: ")
+    show(io, mime, x.wavelength)
+    print(io, "\n    physical size:")
+    show(io, mime, x.physical_size)
+    print(io,"\n    distribution data:\n")
+    show(io, mime, x.distribution_data)
 end
 
 function +(a::MonoLightField2D,b::MonoLightField2D)
