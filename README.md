@@ -5,4 +5,4 @@
 [![Build Status](https://travis-ci.com/HIT-UOI-SR/OpticalPropagation.jl.svg?branch=master)](https://travis-ci.com/HIT-UOI-SR/OpticalPropagation.jl)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/HIT-UOI-SR/OpticalPropagation.jl?svg=true)](https://ci.appveyor.com/project/HIT-UOI-SR/OpticalPropagation-jl)
 
-A package of useful optical propagation methods.
+A package of useful optical propagation methods and simple 2-dimensional light field data types.
