@@ -38,6 +38,6 @@ calculate the propagation light field based on the angular spectrum.
 - `::MonoLightField2D`: Light field data after propagation.
 """
 function angularspectrum(Uin::MonoLightField2D, d::Unitful.Length)
-    Uout = angularspectrum(Uin.distribution_data, uval(d), uval(Uin.wavelength), (uval.(Uin.size))...)
-    MonoLightField2D(Uin, distribution_data=Uout)
+    Uout = angularspectrum(Uin.data, uval(d), uval(Uin.wavelength), (uval.(Uin.size))...)
+    MonoLightField2D(Uin, data=Uout)
 end

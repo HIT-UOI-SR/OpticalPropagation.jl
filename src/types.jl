@@ -26,14 +26,14 @@ julia> MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
 MonoLightField2D:
     wavelength: 6.328e-7 m
     physical size: (0.001 m, 0.001 m)
-    distribution data:
+    complex amplitude data:
 2×2 Array{Complex{Float64},2}:
  1.0+0.0im  2.0+0.0im
  3.0+0.0im  4.0+0.0im
 ```
 """
 struct MonoLightField2D  <: AbstractLightField2D
-    distribution_data::Array{ComplexF64,2}
+    data::Array{ComplexF64,2}
     wavelength::LengthType
     size::Tuple{LengthType,LengthType}
 
@@ -42,7 +42,7 @@ struct MonoLightField2D  <: AbstractLightField2D
 end
 
 function MonoLightField2D(x::MonoLightField2D; kwargs...)
-    dist_data=get(kwargs,:distribution_data,x.distribution_data)
+    dist_data=get(kwargs,:data,x.data)
     wavelen=get(kwargs,:wavelength,x.wavelength)
     phy_size=get(kwargs,:size,x.size)
     MonoLightField2D(dist_data,wavelength=wavelen,size=phy_size)
@@ -50,7 +50,7 @@ end
 
 function Base.show(io::IO, x::MonoLightField2D)
     print(io, "MonoLightField2D(")
-    show(io, x.distribution_data)
+    show(io, x.data)
     print(io, ", wavelength=")
     show(io, x.wavelength)
     print(io, ", size=")
@@ -64,8 +64,8 @@ function Base.show(io::IO, mime::MIME"text/plain", x::MonoLightField2D)
     show(io, mime, x.wavelength)
     print(io, "\n    physical size:")
     show(io, mime, x.size)
-    print(io,"\n    distribution data:\n")
-    show(io, mime, x.distribution_data)
+    print(io,"\n    complex amplitude data:\n")
+    show(io, mime, x.data)
 end
 
 function +(a::MonoLightField2D,b::MonoLightField2D)
@@ -74,7 +74,7 @@ function +(a::MonoLightField2D,b::MonoLightField2D)
     elseif ! all(a.size .≈ b.size)
         @error "Physical size $(a.size) and $(b.size) are not equal."
     else
-        MonoLightField2D(a.distribution_data .+ b.distribution_data,
+        MonoLightField2D(a.data .+ b.data,
             wavelength=a.wavelength,
             size=a.size)
     end
@@ -86,14 +86,14 @@ function -(a::MonoLightField2D,b::MonoLightField2D)
     elseif ! all(a.size .≈ b.size)
         @error "Physical size $(a.size) and $(b.size) are not equal."
     else
-        MonoLightField2D(a.distribution_data .- b.distribution_data,
+        MonoLightField2D(a.data .- b.data,
             wavelength=a.wavelength,
             size=a.size)
     end
 end
 
 *(r::Number, x::MonoLightField2D) =
-    MonoLightField2D(r .* x.distribution_data,
+    MonoLightField2D(r .* x.data,
         wavelength = x.wavelength,
         size = x.size)
 
@@ -106,5 +106,5 @@ end
 function Base.isapprox(a::MonoLightField2D,b::MonoLightField2D; kwargs...)
     isapprox(a.wavelength,b.wavelength,kwargs...) &&
       all(isapprox.(a.size,b.size,kwargs...)) &&
-      isapprox(a.distribution_data,b.distribution_data,kwargs...)
+      isapprox(a.data,b.data,kwargs...)
 end

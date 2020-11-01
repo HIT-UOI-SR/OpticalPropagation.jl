@@ -6,7 +6,7 @@ using Unitful
     @testset "MonoLightField2D" begin
         @test begin
             o=MonoLightField2D([1 2; 3 4],wavelength=632.8*u"nm",size=(1*u"mm",1*u"mm"))
-            ro=MonoLightField2D(o,distribution_data=[3 1; 2 4])
+            ro=MonoLightField2D(o,data=[3 1; 2 4])
             r=MonoLightField2D([3 1; 2 4],wavelength=632.8*u"nm",size=(1*u"mm",1*u"mm"))
             ro≈r
         end
@@ -24,7 +24,7 @@ using Unitful
         end
         @test begin
             o=MonoLightField2D([1 2; 3 4],wavelength=632.8*u"nm",size=(1*u"mm",1*u"mm"))
-            ro=MonoLightField2D(o,distribution_data=[3 1; 2 4],wavelength=1.15*u"μm")
+            ro=MonoLightField2D(o,data=[3 1; 2 4],wavelength=1.15*u"μm")
             r=MonoLightField2D([3 1; 2 4],wavelength=1.15*u"μm",size=(1*u"mm",1*u"mm"))
             ro≈r
         end
