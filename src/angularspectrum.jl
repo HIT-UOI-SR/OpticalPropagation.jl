@@ -16,11 +16,10 @@ calculate the propagation light field based on the angular spectrum.
 - `::Array{<:Number,2}`: Complex amplitude data after propagation.
 """
 function angularspectrum(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
-    tf = (u, v) -> 1-u^2-v^2>=0 ? exp(2im*pi*d/λ*sqrt(1-u^2-v^2)) : 0
     (n, m) = size(Uin)
-    u = (-n/2+1:n/2)/lx*λ
-    v = (-m/2+1:m/2)/ly*λ
-    ifft(fft(Uin).*fftshift(tf.(u',v)))
+    ua = (-n/2+1:n/2)/lx*λ
+    va = (-m/2+1:m/2)/ly*λ
+    ifft(fft(Uin).*fftshift([1.0-u^2-v^2>=0.0 ? exp(2im*pi*d/λ*sqrt(1.0-u^2-v^2)) : 0.0+0.0im for v in va, u in ua]))
 end
 
 

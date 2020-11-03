@@ -16,11 +16,10 @@ calculate the propagation light field based on the Fresnel diffraction with doub
 - `::Array{<:Number,2}`: Complex amplitude data after propagation.
 """
 function fresnel2(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
-    tf = (u, v) -> exp(2im*pi*d/λ)*exp(-im*pi*d/λ*(u^2+v^2))
     (n, m) = size(Uin)
-    u = (-n/2+1:n/2)/lx*λ
-    v = (-m/2+1:m/2)/ly*λ
-    ifft(fft(Uin).*fftshift(tf.(u',v)))
+    ua = (-n/2+1:n/2)/lx*λ
+    va = (-m/2+1:m/2)/ly*λ
+    ifft(fft(Uin).*fftshift([exp(2im*pi*d/λ)*exp(-im*pi*d/λ*(u^2+v^2)) for v in va, u in ua]))
 end
 
 """
@@ -55,18 +54,17 @@ calculate the propagation light field based on the Fresnel diffraction with sing
 - `lyo::Real`: The physical size of the diffraction data along the y-axis.
 """
 function fresnel1(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
-    qp = (x, y) -> exp(im*pi/d/λ*(x^2+y^2))
     (n, m) = size(Uin)
     dx = lx/n
     dy = ly/m
     lxo = λ*d/dx
     lyo = λ*d/dy
-    u = (-n/2+1:n/2)/lx*λ
-    v = (-m/2+1:m/2)/ly*λ
-    amp = fft(Uin.*qp.(u', v))
-    u *= lx/lxo
-    v *= ly/lyo
-    Uout = amp.*qp.(u', v).*exp(2im*pi*d/λ).*dx.*dy./(im*λ*d)
+    xa = (-n/2+1:n/2)/lx*λ
+    ya = (-m/2+1:m/2)/ly*λ
+    amp = fft(Uin.*[exp(im*pi/d/λ*(x^2+y^2)) for y in ya, x in xa])
+    xa *= lx/lxo
+    ya *= ly/lyo
+    Uout = amp.*[exp(im*pi/d/λ*(x^2+y^2)) for y in ya, x in xa].*exp(2im*pi*d/λ).*dx.*dy./(im*λ*d)
     (Uout, (lxo, lyo))
 end
 
