@@ -71,7 +71,7 @@ function fresnel1(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, l
 end
 
 """
-    fresnel1(Uin::MonoLightField2D, d::Real) -> MonoLightField2D
+    fresnel1(Uin::MonoLightField2D, d::Unitful.Length) -> MonoLightField2D
 
 calculate the propagation light field for [`MonoLightField2D`](@ref) based on the Fresnel diffraction with single Fourier transform.
 """
