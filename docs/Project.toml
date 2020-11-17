@@ -1,3 +1,4 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+OpticalPropagation = "bd2a9720-0cf4-11ea-3d1a-97ce67aae37d"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
