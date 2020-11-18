@@ -3,7 +3,7 @@ using Test
 using Unitful
 
 @testset "OpticalPropagation.jl" begin
-    @testset "MonoLightField2D" begin
+    @testset "MonoLightField2D Constructors" begin
         @test begin
             o=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             ro=MonoLightField2D(o,data=[3 1; 2 4])
@@ -34,38 +34,28 @@ using Unitful
             r=MonoLightField2D([1 2; 3 4],wavelength=1.15u"μm",size=(1.5u"mm",2.0u"mm"))
             ro≈r
         end
+    end
+    @testset "Additive Operator $op" for op in [(+), (-)]
         @test begin
-            a=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
-            b=MonoLightField2D([1.0 -2; 3im -5],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
-            c=MonoLightField2D([2.0 0.0; 3.0+3.0im -1.0],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
-            a+b≈c
-        end
-        @test begin
-            a=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
-            b=MonoLightField2D([1.0 -2; 3im -5],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
-            c=MonoLightField2D([0.0 4.0; 3.0-3.0im 9.0],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
-            a-b≈c
+            ad = [1 2; 3 4]
+            bd = [1.0 -2; 3im -5]
+            a=MonoLightField2D(ad,wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
+            b=MonoLightField2D(bd,wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
+            c=MonoLightField2D(op(ad, bd),wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
+            op(a,b)≈c
         end
         @test_throws DimensionMismatch begin
             a=MonoLightField2D([1 2; 3 4],wavelength=589.6u"nm",size=(1u"mm",1u"mm"))
             b=MonoLightField2D([1.0 -2; 3im -5],wavelength=589u"nm",size=(1u"mm",1u"mm"))
-            a+b
-        end
-        @test_throws DimensionMismatch begin
-            a=MonoLightField2D([1 2; 3 4],wavelength=589.6u"nm",size=(1u"mm",1u"mm"))
-            b=MonoLightField2D([1.0 -2; 3im -5],wavelength=589u"nm",size=(1u"mm",1u"mm"))
-            a-b
+            op(a,b)
         end
         @test_throws DimensionMismatch begin
             a=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             b=MonoLightField2D([1.0 -2; 3im -5],wavelength=632.8u"nm",size=(1.1u"mm",1.1u"mm"))
-            a+b
+            op(a,b)
         end
-        @test_throws DimensionMismatch begin
-            a=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
-            b=MonoLightField2D([1.0 -2; 3im -5],wavelength=632.8u"nm",size=(1.1u"mm",1.1u"mm"))
-            a-b
-        end
+    end
+    @testset "Multiplicative Operator" begin
         @test begin
             a=2+3im
             b=MonoLightField2D([1.0 -2; 3im -1+4im],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
