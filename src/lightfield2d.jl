@@ -9,7 +9,7 @@ abstract type AbstractLightField2D end
 -(x::AbstractLightField2D,y::AbstractLightField2D) = -(promote(x,y)...)
 Base.isapprox(x::AbstractLightField2D,y::AbstractLightField2D; kwargs...) = isapprox(promote(x,y)...,kwargs...)
 
-const LengthType=typeof(1.0*u"m");
+const LengthType=typeof(1.0u"m");
 
 
 """
