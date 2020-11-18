@@ -17,9 +17,9 @@ calculate the propagation light field based on the angular spectrum.
 """
 function angularspectrum(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
     (n, m) = size(Uin)
-    ua = (-n/2+1:n/2)/lx*λ
-    va = (-m/2+1:m/2)/ly*λ
-    ifft(fft(Uin).*fftshift([1.0-u^2-v^2>=0.0 ? exp(2im*pi*d/λ*sqrt(1.0-u^2-v^2)) : 0.0+0.0im for v in va, u in ua]))
+    ua = (-n/2:n/2-1)/lx*λ
+    va = (-m/2:m/2-1)/ly*λ
+    ifft(fft(Uin).*ifftshift([1.0-u^2-v^2>=0.0 ? exp(2im*pi*d/λ*sqrt(1.0-u^2-v^2)) : 0.0+0.0im for v in va, u in ua]))
 end
 
 
