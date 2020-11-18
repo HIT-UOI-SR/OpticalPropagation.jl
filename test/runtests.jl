@@ -72,17 +72,19 @@ using Unitful
     @testset "Scale Invariant Propagation: $p" for p in [angularspectrum, fresnel2]
         @test begin
             λ=632.8e-9
-            lx=ly=1e-3
+            lx=1.2e-3
+            ly=1e-3
             d=1e-2
-            Uin = ones(ComplexF64, 1024, 1024)
+            Uin = ones(ComplexF64, 1024, 768)
             Uout = Uin*exp(2im*pi*d/λ)
             p(Uin, d, λ, lx, ly)≈Uout
         end
         @test begin
             λ=632.8u"nm"
-            lx=ly=1u"mm"
+            lx=1.2u"mm"
+            ly=1u"mm"
             d=1u"cm"
-            Uin = MonoLightField2D(ones(ComplexF64, 1024, 1024),wavelength=λ,size=(lx,ly))
+            Uin = MonoLightField2D(ones(ComplexF64, 1024, 768),wavelength=λ,size=(lx,ly))
             Uout = Uin*exp(2im*pi*convert(Float64, d/λ))
             p(Uin, d)≈Uout
         end
