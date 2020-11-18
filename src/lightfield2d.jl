@@ -19,7 +19,7 @@ const LengthType=typeof(1.0*u"m");
 
 # Examples
 
-```jldoctest
+```jldoctest; setup = :(using OpticalPropagation)
 julia> using Unitful
 
 julia> MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
