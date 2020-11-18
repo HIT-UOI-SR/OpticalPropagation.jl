@@ -70,9 +70,9 @@ end
 
 function +(a::MonoLightField2D,b::MonoLightField2D)
     if ! (a.wavelength≈b.wavelength)
-        @error "Wavelengths $(a.wavelength) and $(b.wavelength) are not equal."
+        throw(DimensionMismatch("Wavelengths $(a.wavelength) and $(b.wavelength) are not equal."))
     elseif ! all(a.size .≈ b.size)
-        @error "Physical size $(a.size) and $(b.size) are not equal."
+        throw(DimensionMismatch("Physical size $(a.size) and $(b.size) are not equal."))
     else
         MonoLightField2D(a.data .+ b.data,
             wavelength=a.wavelength,
@@ -82,9 +82,9 @@ end
 
 function -(a::MonoLightField2D,b::MonoLightField2D)
     if ! (a.wavelength≈b.wavelength)
-        @error "Wavelengths $(a.wavelength) and $(b.wavelength) are not equal."
+        throw(DimensionMismatch("Wavelengths $(a.wavelength) and $(b.wavelength) are not equal."))
     elseif ! all(a.size .≈ b.size)
-        @error "Physical size $(a.size) and $(b.size) are not equal."
+        throw(DimensionMismatch("Physical size $(a.size) and $(b.size) are not equal."))
     else
         MonoLightField2D(a.data .- b.data,
             wavelength=a.wavelength,
