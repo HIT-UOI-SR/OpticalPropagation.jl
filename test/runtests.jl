@@ -46,6 +46,26 @@ using Unitful
             c=MonoLightField2D([0.0 4.0; 3.0-3.0im 9.0],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             a-b≈c
         end
+        @test_throws DimensionMismatch begin
+            a=MonoLightField2D([1 2; 3 4],wavelength=589.6u"nm",size=(1u"mm",1u"mm"))
+            b=MonoLightField2D([1.0 -2; 3im -5],wavelength=589u"nm",size=(1u"mm",1u"mm"))
+            a+b
+        end
+        @test_throws DimensionMismatch begin
+            a=MonoLightField2D([1 2; 3 4],wavelength=589.6u"nm",size=(1u"mm",1u"mm"))
+            b=MonoLightField2D([1.0 -2; 3im -5],wavelength=589u"nm",size=(1u"mm",1u"mm"))
+            a-b
+        end
+        @test_throws DimensionMismatch begin
+            a=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
+            b=MonoLightField2D([1.0 -2; 3im -5],wavelength=632.8u"nm",size=(1.1u"mm",1.1u"mm"))
+            a+b
+        end
+        @test_throws DimensionMismatch begin
+            a=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
+            b=MonoLightField2D([1.0 -2; 3im -5],wavelength=632.8u"nm",size=(1.1u"mm",1.1u"mm"))
+            a-b
+        end
         @test begin
             a=2+3im
             b=MonoLightField2D([1.0 -2; 3im -1+4im],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
