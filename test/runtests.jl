@@ -89,4 +89,17 @@ using Unitful
             p(Uin, d)≈Uout
         end
     end
+    @testset "Fresnel S-FFT" begin
+        @test begin
+            λ=632.8e-9
+            lx=1.2e-3
+            ly=1e-3
+            d=1e-2
+            nx = 16
+            ny = 9
+            Uin = ones(ComplexF64, nx, ny)
+            (_, (lxo, lyo)) = fresnel1(Uin, d, λ, lx, ly)
+            lxo≈λ*d*nx/lx && lyo≈λ*d*ny/ly
+        end
+    end
 end
