@@ -65,8 +65,16 @@ using Unitful
             lx=ly=1e-3
             d=1e-2
             Uin = ones(ComplexF64, 1024, 1024)
-            Uout = ones(ComplexF64, 1024, 1024)*exp(2im*pi*d/λ)
+            Uout = Uin*exp(2im*pi*d/λ)
             p(Uin, d, λ, lx, ly)≈Uout
+        end
+        @test begin
+            λ=632.8u"nm"
+            lx=ly=1u"mm"
+            d=1u"cm"
+            Uin = MonoLightField2D(ones(ComplexF64, 1024, 1024),wavelength=λ,size=(lx,ly))
+            Uout = Uin*exp(2im*pi*convert(Float64, d/λ))
+            p(Uin, d)≈Uout
         end
     end
 end
