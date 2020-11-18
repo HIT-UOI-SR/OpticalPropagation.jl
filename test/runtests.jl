@@ -59,4 +59,14 @@ using Unitful
             a/b≈b\a≈c
         end
     end
+    @testset "Scale Invariant Propagation: $p" for p in [angularspectrum, fresnel2]
+        @test begin
+            λ=632.8e-9
+            lx=ly=1e-3
+            d=1e-2
+            Uin = ones(ComplexF64, 1024, 1024)
+            Uout = ones(ComplexF64, 1024, 1024)*exp(2im*pi*d/λ)
+            p(Uin, d, λ, lx, ly)≈Uout
+        end
+    end
 end
