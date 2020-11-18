@@ -19,7 +19,7 @@ function angularspectrum(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::
     (n, m) = size(Uin)
     ua = (-n/2:n/2-1)/lx*λ
     va = (-m/2:m/2-1)/ly*λ
-    ifft(fft(Uin).*ifftshift([1.0-u^2-v^2>=0.0 ? exp(2im*pi*d/λ*sqrt(1.0-u^2-v^2)) : 0.0+0.0im for v in va, u in ua]))
+    ifft(fft(Uin).*ifftshift([1.0-u^2-v^2>=0.0 ? exp(2im*pi*d/λ*sqrt(1.0-u^2-v^2)) : 0.0+0.0im for u in ua, v in va]))
 end
 
 

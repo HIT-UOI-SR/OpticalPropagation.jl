@@ -19,7 +19,7 @@ function fresnel2(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, l
     (n, m) = size(Uin)
     ua = (-n/2:n/2-1)/lx*λ
     va = (-m/2:m/2-1)/ly*λ
-    ifft(fft(Uin).*ifftshift([exp(2im*pi*d/λ)*exp(-im*pi*d/λ*(u^2+v^2)) for v in va, u in ua]))
+    ifft(fft(Uin).*ifftshift([exp(2im*pi*d/λ)*exp(-im*pi*d/λ*(u^2+v^2)) for u in ua, v in va]))
 end
 
 """
@@ -61,10 +61,10 @@ function fresnel1(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, l
     lyo = λ*d/dy
     xa = (-n/2:n/2-1)/lx*λ
     ya = (-m/2:m/2-1)/ly*λ
-    amp = fftshift(fft(Uin.*[exp(im*pi/d/λ*(x^2+y^2)) for y in ya, x in xa]))
+    amp = fftshift(fft(Uin.*[exp(im*pi/d/λ*(x^2+y^2)) for x in xa, y in ya]))
     xa *= lx/lxo
     ya *= ly/lyo
-    Uout = amp.*[exp(im*pi/d/λ*(x^2+y^2)) for y in ya, x in xa].*exp(2im*pi*d/λ).*dx.*dy./(im*λ*d)
+    Uout = amp.*[exp(im*pi/d/λ*(x^2+y^2)) for x in xa, y in ya].*exp(2im*pi*d/λ).*dx.*dy./(im*λ*d)
     (Uout, (lxo, lyo))
 end
 
