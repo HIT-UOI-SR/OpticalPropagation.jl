@@ -70,7 +70,7 @@ using Unitful
         end
     end
     @testset "Scale Invariant Propagation: $p" for p in [angularspectrum, fresnel2]
-        @test begin
+        @test begin # plane wave
             λ=632.8e-9
             lx=1.2e-3
             ly=1e-3
@@ -79,7 +79,7 @@ using Unitful
             Uout = Uin*exp(2im*pi*d/λ)
             p(Uin, d, λ, lx, ly)≈Uout
         end
-        @test begin
+        @test begin # plane wave
             λ=632.8u"nm"
             lx=1.2u"mm"
             ly=1u"mm"
@@ -88,9 +88,17 @@ using Unitful
             Uout = Uin*exp(2im*pi*convert(Float64, d/λ))
             p(Uin, d)≈Uout
         end
+        @test begin # distance superposition
+            λ=632.8u"nm"
+            lx=ly=1u"mm"
+            d1=1u"cm"
+            d2=25u"mm"
+            Uin = MonoLightField2D(rand(ComplexF64, 512, 512),wavelength=λ,size=(lx,ly))
+            (p(d2)∘p(d1))(Uin)≈(p(d1)∘p(d2))(Uin)≈p(Uin, d1+d2)
+        end
     end
     @testset "Fresnel S-FFT" begin
-        @test begin
+        @test begin # sample rate
             λ=632.8e-9
             lx=1.2e-3
             ly=1e-3
