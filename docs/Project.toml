@@ -1,4 +1,5 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 OpticalPropagation = "bd2a9720-0cf4-11ea-3d1a-97ce67aae37d"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
