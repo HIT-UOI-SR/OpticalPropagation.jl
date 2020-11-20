@@ -108,3 +108,16 @@ function Base.isapprox(a::MonoLightField2D,b::MonoLightField2D; kwargs...)
       all(isapprox.(a.size,b.size,kwargs...)) &&
       isapprox(a.data,b.data,kwargs...)
 end
+
+@recipe function plot(light::MonoLightField2D)
+    (m, n) = size(light.data)
+    x = ((-1/2):(1/m):(1/2-1/m))*ruval(light.size[1])
+    y = ((-1/2):(1/n):(1/2-1/n))*ruval(light.size[2])
+    z = abs.(light.data)
+    seriestype --> :heatmap
+    aspect_ratio --> :equal
+    xguide --> unit(light.size[1])
+    yguide --> unit(light.size[2])
+    size --> (m, n)
+    x, y, z
+end

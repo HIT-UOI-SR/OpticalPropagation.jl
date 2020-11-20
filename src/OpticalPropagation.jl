@@ -2,6 +2,7 @@ module OpticalPropagation
 
 using FFTW
 using Unitful
+using RecipesBase
 
 import Base:
     +, -, *, /, \
