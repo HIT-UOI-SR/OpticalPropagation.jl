@@ -109,11 +109,11 @@ function Base.isapprox(a::MonoLightField2D,b::MonoLightField2D; kwargs...)
       isapprox(a.data,b.data,kwargs...)
 end
 
-@recipe function plot(light::MonoLightField2D; unit = u"mm")
+@recipe function plot(light::MonoLightField2D; datafunction=abs, unit = u"mm")
     (m, n) = size(light.data)
     x = ((-1/2):(1/m):(1/2-1/m))*uconvert(Unitful.NoUnits, light.size[1]/unit)
     y = ((-1/2):(1/n):(1/2-1/n))*uconvert(Unitful.NoUnits, light.size[2]/unit)
-    z = abs.(light.data)
+    z = datafunction.(light.data)
     seriestype --> :heatmap
     aspect_ratio --> :equal
     xguide --> unit
