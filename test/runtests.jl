@@ -1,6 +1,7 @@
 using OpticalPropagation
 using Test
 using Unitful
+using RecipesBase
 
 @testset "OpticalPropagation.jl" begin
     @testset "MonoLightField2D Constructors" begin
@@ -64,6 +65,16 @@ using Unitful
             c=MonoLightField2D([0.6-0.2im -1.2+0.4im; 0.6+1.8im 0.2+2.6im],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             a/b≈b\a≈c
         end
+    end
+    @testset "Plot Recipes" begin
+        import RecipesBase.is_key_supported # We hack the RecipesBase to avoid MethodError when apply_recipe
+        RecipesBase.is_key_supported(k::Symbol) = false
+        l=MonoLightField2D(ones(4,5),wavelength=632.8u"nm",size=(1u"mm",1.2u"mm"))
+        rec = RecipesBase.apply_recipe(Dict{Symbol, Any}(), l)
+        @test getfield(rec[1],1)[:aspect_ratio] == :equal
+        @test getfield(rec[1],1)[:size] == (4, 5)
+        @test getfield(rec[1],1)[:xguide] == getfield(rec[1],1)[:yguide] == u"mm"
+        @test rec[1].args == (-0.5:0.25:0.25, -0.6:0.24:0.36, ones(4,5))
     end
     @testset "Scale Invariant Propagation: $p" for p in [angularspectrum, fresnel2]
         @test begin # plane wave
