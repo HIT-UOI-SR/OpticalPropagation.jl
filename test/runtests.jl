@@ -4,32 +4,28 @@ using Unitful
 
 @testset "OpticalPropagation.jl" begin
     @testset "MonoLightField2D Constructors" begin
+        o=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
         @test begin
-            o=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             ro=MonoLightField2D(o,data=[3 1; 2 4])
             r=MonoLightField2D([3 1; 2 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             ro≈r
         end
         @test begin
-            o=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             ro=MonoLightField2D(o,wavelength=1.15u"μm")
             r=MonoLightField2D([1 2; 3 4],wavelength=1.15u"μm",size=(1u"mm",1u"mm"))
             ro≈r
         end
         @test begin
-            o=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             ro=MonoLightField2D(o,size=(1.5u"mm",2.0u"mm"))
             r=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1.5u"mm",2.0u"mm"))
             ro≈r
         end
         @test begin
-            o=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             ro=MonoLightField2D(o,data=[3 1; 2 4],wavelength=1.15u"μm")
             r=MonoLightField2D([3 1; 2 4],wavelength=1.15u"μm",size=(1u"mm",1u"mm"))
             ro≈r
         end
         @test begin
-            o=MonoLightField2D([1 2; 3 4],wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
             ro=MonoLightField2D(o,wavelength=1.15u"μm",size=(1.5u"mm",2.0u"mm"))
             r=MonoLightField2D([1 2; 3 4],wavelength=1.15u"μm",size=(1.5u"mm",2.0u"mm"))
             ro≈r
