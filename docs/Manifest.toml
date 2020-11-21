@@ -424,7 +424,7 @@ version = "1.1.1+6"
 deps = ["FFTW", "RecipesBase", "Unitful"]
 path = ".."
 uuid = "bd2a9720-0cf4-11ea-3d1a-97ce67aae37d"
-version = "0.1.0"
+version = "0.2.0"
 
 [[Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
