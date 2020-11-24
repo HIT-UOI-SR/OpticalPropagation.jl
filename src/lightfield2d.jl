@@ -109,6 +109,8 @@ function Base.isapprox(a::MonoLightField2D,b::MonoLightField2D; kwargs...)
       isapprox(a.data,b.data,kwargs...)
 end
 
+Base.size(a::MonoLightField2D) = size(a.data)
+
 @recipe function plot(light::MonoLightField2D; datafunction=abs, unit = u"mm")
     (m, n) = size(light.data)
     x = ((-1/2):(1/m):(1/2-1/m))*uconvert(Unitful.NoUnits, light.size[1]/unit)

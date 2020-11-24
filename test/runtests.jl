@@ -66,6 +66,10 @@ using RecipesBase
             a/b≈b\a≈c
         end
     end
+    @testset "Array-like" begin
+        a=MonoLightField2D(rand(4,5),wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
+        @test size(a) == size(a.data)
+    end
     @testset "Plot Recipes" begin
         import RecipesBase.is_key_supported # We hack the RecipesBase to avoid MethodError when apply_recipe
         RecipesBase.is_key_supported(k::Symbol) = false
