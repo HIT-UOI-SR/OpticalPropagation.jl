@@ -69,6 +69,11 @@ using RecipesBase
     @testset "Array-like" begin
         a=MonoLightField2D(rand(4,5),wavelength=632.8u"nm",size=(1u"mm",1u"mm"))
         @test size(a) == size(a.data)
+        @test a[1,1] == a.data[1,1]
+        @test begin
+            a[2,3] = 10
+            a[2,3] == 10
+        end
     end
     @testset "Plot Recipes" begin
         import RecipesBase.is_key_supported # We hack the RecipesBase to avoid MethodError when apply_recipe

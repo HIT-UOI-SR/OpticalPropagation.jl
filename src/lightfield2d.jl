@@ -110,6 +110,8 @@ function Base.isapprox(a::MonoLightField2D,b::MonoLightField2D; kwargs...)
 end
 
 Base.size(a::MonoLightField2D) = size(a.data)
+Base.getindex(a::MonoLightField2D, inds::Vararg{Int,2}) = a.data[inds...]
+Base.setindex!(a::MonoLightField2D, val, inds::Vararg{Int,2}) = a.data[inds...] = val
 
 @recipe function plot(light::MonoLightField2D; datafunction=abs, unit = u"mm")
     (m, n) = size(light.data)
