@@ -1,19 +1,8 @@
-"""
-    AbstractLightField
-
-Abstract supertype of all 2-dimensional light field types.
-"""
-abstract type AbstractLightField2D end
-
-+(x::AbstractLightField2D,y::AbstractLightField2D) = +(promote(x,y)...)
--(x::AbstractLightField2D,y::AbstractLightField2D) = -(promote(x,y)...)
-Base.isapprox(x::AbstractLightField2D,y::AbstractLightField2D; kwargs...) = isapprox(promote(x,y)...,kwargs...)
-
 const LengthType=typeof(1.0u"m");
 
 
 """
-    MonoLightField2D  <: AbstractLightField2D
+    MonoLightField2D
 
 `MonoLightField2D` is used to represent a 2-dimensional monochromatic light field.
 
@@ -32,7 +21,7 @@ MonoLightField2D:
  3.0+0.0im  4.0+0.0im
 ```
 """
-struct MonoLightField2D  <: AbstractLightField2D
+struct MonoLightField2D
     data::Array{ComplexF64,2}
     wavelength::LengthType
     size::Tuple{LengthType,LengthType}
