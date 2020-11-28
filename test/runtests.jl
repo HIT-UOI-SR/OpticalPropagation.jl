@@ -74,6 +74,7 @@ using RecipesBase
             a[2,3] = 10
             a[2,3] == 10
         end
+        @test abs.(a) == MonoLightField2D(a, data=abs.(a.data))
     end
     @testset "Plot Recipes" begin
         import RecipesBase.is_key_supported # We hack the RecipesBase to avoid MethodError when apply_recipe

@@ -21,7 +21,7 @@ MonoLightField2D:
  3.0+0.0im  4.0+0.0im
 ```
 """
-struct MonoLightField2D
+struct MonoLightField2D <: AbstractArray{ComplexF64,2}
     data::Array{ComplexF64,2}
     wavelength::LengthType
     size::Tuple{LengthType,LengthType}
@@ -101,6 +101,20 @@ end
 Base.size(a::MonoLightField2D) = size(a.data)
 Base.getindex(a::MonoLightField2D, inds::Vararg{Int,2}) = a.data[inds...]
 Base.setindex!(a::MonoLightField2D, val, inds::Vararg{Int,2}) = a.data[inds...] = val
+
+Base.BroadcastStyle(::Type{MonoLightField2D}) = Broadcast.ArrayStyle{MonoLightField2D}()
+function Base.similar(bc::Broadcast.Broadcasted{Broadcast.ArrayStyle{MonoLightField2D}}, ::Type{ElType}) where ElType
+    # Scan the inputs for the MonoLightField2D:
+    A = find_monolightfield2d(bc)
+    MonoLightField2D(A, data = similar(Array{ElType}, axes(bc)))
+end
+
+find_monolightfield2d(bc::Base.Broadcast.Broadcasted) = find_monolightfield2d(bc.args)
+find_monolightfield2d(::Tuple{}) = nothing
+find_monolightfield2d(args::Tuple) = find_monolightfield2d(find_monolightfield2d(args[1]), Base.tail(args))
+find_monolightfield2d(x) = x
+find_monolightfield2d(a::MonoLightField2D, rest) = a
+find_monolightfield2d(::Any, rest) = find_monolightfield2d(rest)
 
 @recipe function plot(light::MonoLightField2D; datafunction=abs, unit = u"mm")
     (m, n) = size(light.data)
