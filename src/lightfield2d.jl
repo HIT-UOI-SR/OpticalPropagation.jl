@@ -16,7 +16,7 @@ MonoLightField2D:
     wavelength: 6.328e-7 m
     physical size: (0.001 m, 0.001 m)
     complex amplitude data:
-2×2 Array{Complex{Float64},2}:
+2×2 Matrix{ComplexF64}:
  1.0+0.0im  2.0+0.0im
  3.0+0.0im  4.0+0.0im
 ```
