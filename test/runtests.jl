@@ -127,4 +127,5 @@ using RecipesBase
             lxo≈λ*d*nx/lx && lyo≈λ*d*ny/ly
         end
     end
+    include("fresnelkirchhoff.jl")
 end
