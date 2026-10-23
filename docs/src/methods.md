@@ -9,6 +9,22 @@ Here are some useful optical propagation methods.
     fresnelkirchhoff
 ```
 
+## Physical windows
+
+The light-field interfaces preserve `gridcenter(field)` for angular-spectrum,
+double-FFT Fresnel, single-FFT Fresnel and planar Fresnel–Kirchhoff propagation.
+The output window follows the input centre. Single-FFT Fresnel updates the
+physical widths using its existing sampling relation; the other planar methods
+preserve the widths. The low-level matrix APIs and numerical kernels are unchanged.
+The existing single-FFT negative-distance convention (signed output widths) also
+remains unchanged; coordinate ranges follow those signed widths.
+
+Finite-radius Fresnel–Kirchhoff propagation currently requires a zero-centred
+window. It rejects nonzero centres because the existing surface weights and
+geometry checks assume coordinates about the optical axis. Off-axis spherical
+propagation needs a separate numerical extension. Centred spherical windows
+continue to scale by `1 + d/radius`.
+
 ## Fresnel–Kirchhoff propagation
 
 `fresnelkirchhoff` evaluates a spatial zone-mask convolution using zero-padded

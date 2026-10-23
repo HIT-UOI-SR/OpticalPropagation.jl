@@ -13,6 +13,11 @@ import Base:
 export
     AbstractLightField2D,
     MonoLightField2D,
+    physicalsize,
+    samplepitch,
+    gridcenter,
+    coordinates,
+    crop,
     angularspectrum,
     fresnel2,
     fresnel1,

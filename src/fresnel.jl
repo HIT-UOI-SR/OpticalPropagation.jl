@@ -29,7 +29,7 @@ calculate the propagation light field for [`MonoLightField2D`](@ref) based on th
 """
 function fresnel2(Uin::MonoLightField2D, d::Unitful.Length)
     Uout = fresnel2(Uin.data, auval(d), auval(Uin.wavelength), auval(Uin.size[1]), auval(Uin.size[2]))
-    MonoLightField2D(Uin, data=Uout)
+    _withdata(Uin, Uout)
 end
 
 """
@@ -82,7 +82,7 @@ calculate the propagation light field for [`MonoLightField2D`](@ref) based on th
 """
 function fresnel1(Uin::MonoLightField2D, d::Unitful.Length)
     (Uout, Lout) = fresnel1(Uin.data, auval(d), auval(Uin.wavelength), auval(Uin.size[1]), auval(Uin.size[2]))
-    MonoLightField2D(Uin, data=Uout, size=Lout)
+    _withdata(Uin, Uout; size=Lout .* u"m")
 end
 
 """

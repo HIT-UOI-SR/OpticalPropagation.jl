@@ -91,13 +91,18 @@ end
 Propagate a monochromatic light field with [`fresnelkirchhoff`](@ref). A finite
 signed `radius` selects a spherical reference surface and scales the output
 physical size by `1 + d/radius`. The wavelength is preserved.
+The planar mode preserves the window centre. Finite-radius propagation currently
+requires a zero-centred window; support for off-axis spherical caps is deferred.
 """
 function fresnelkirchhoff(Uin::MonoLightField2D, d::Unitful.Length;
                          radius::Unitful.Length=Inf*u"m")
+    if isfinite(radius) && any(!iszero, gridcenter(Uin))
+        throw(ArgumentError("finite-radius propagation currently requires a zero-centred window"))
+    end
     Uout = fresnelkirchhoff(Uin.data, auval(d), auval(Uin.wavelength),
                           auval(Uin.size[1]), auval(Uin.size[2]); radius=auval(radius))
     scale = 1 + auval(d)/auval(radius)
-    MonoLightField2D(Uin, data=Uout, size=scale .* Uin.size)
+    _withdata(Uin, Uout; size=scale .* Uin.size, center=scale .* gridcenter(Uin))
 end
 
 """
