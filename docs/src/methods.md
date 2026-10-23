@@ -7,6 +7,7 @@ Here are some useful optical propagation methods.
     fresnel1
     fresnel2
     fresnelkirchhoff
+    rayleighsommerfeld
 ```
 
 ## Physical windows
@@ -158,3 +159,61 @@ Reference: Jerome A. Hudson, [“Fresnel-Kirchhoff diffraction in optical system
 an approximate computational algorithm”](https://doi.org/10.1364/AO.23.002292),
 *Applied Optics* **23**, 2292–2295 (1984). The implementation uses the derivation
 in the [public publisher preview](https://www.researchgate.net/publication/5638727_Fresnel-Kirchhoff_diffraction_in_optical_systems_an_approximate_computational_algorithm).
+
+## Rayleigh–Sommerfeld propagation
+
+`rayleighsommerfeld` evaluates the first Rayleigh–Sommerfeld integral using
+Shen and Wang's FFT direct integration (FFT-DI). It convolves the finite input
+aperture with the full impulse response
+
+```math
+h(x,y;d) = \frac{d\,e^{ikr}}{2\pi r^2}\left(\frac{1}{r}-ik\right),
+\qquad r=\sqrt{x^2+y^2+d^2},\qquad k=\frac{2\pi}{\lambda}.
+```
+
+The spherical phase, obliquity factor and near-field term are retained, without
+the Fresnel approximation. Padding to at least `(2Nx-1, 2Ny-1)` prevents periodic
+wraparound in the retained output window; FFT lengths are rounded up to products
+of 2, 3 and 5 for efficiency. The output preserves the sample counts, physical
+widths, wavelength and window centre. Both windows can be translated together.
+Distances must be finite and nonnegative; zero distance returns a complex copy.
+
+The default `quadrature=:rectangle` evaluates the Riemann sum with area
+`Δx*Δy` for every sample. It supports rectangular arrays, odd and even counts,
+and singleton dimensions. The optional `quadrature=:simpson` applies the tensor
+product of `[1,4,2,…,4,1]/3` before convolution. Each dimension must then contain
+an odd number of at least three samples. Simpson's rule integrates between the
+first and last sample coordinates, a span of `(N-1)*Δ`; it does not add a sample
+at the excluded upper endpoint of the physical window of width `N*Δ`.
+
+```@example rayleighsommerfeld
+using OpticalPropagation, Unitful
+
+aperture = MonoLightField2D(ones(65, 49),
+    wavelength=633u"nm", size=(0.1u"mm", 0.08u"mm"))
+diffracted = rayleighsommerfeld(aperture, 20u"mm")
+simpson = rayleighsommerfeld(20u"mm"; quadrature=:simpson)(aperture)
+size(diffracted), samplepitch(simpson), gridcenter(simpson)
+```
+
+Resolve both the input field and the oscillations of the kernel, especially for
+small distances or large transverse displacements. Zero padding prevents circular
+convolution but does not repair undersampling or an insufficient input aperture.
+Refine the sample pitch and check convergence when choosing a grid. Finite output
+windows may omit diffracted power, so a propagation pair is not generally an
+inverse and need not conserve the power measured inside that window.
+
+This implementation follows Shen and Wang, Eqs. (7)–(20), with equal input and
+output pitches. Nascov and Logofătu describe a separate scaled-convolution method
+that allows independent input and output sampling; that extension is not
+implemented here.
+
+References:
+
+1. F. Shen and A. Wang, [“Fast-Fourier-transform based numerical integration method
+   for the Rayleigh-Sommerfeld diffraction formula”](https://doi.org/10.1364/AO.45.001102),
+   *Applied Optics* **45**, 1102–1110 (2006).
+   [Open full text](https://vtechworks.lib.vt.edu/bitstream/handle/10919/46900/ao-45-6-1102.pdf).
+2. V. Nascov and P. C. Logofătu, [“Fast computation algorithm for the
+   Rayleigh-Sommerfeld diffraction formula using a type of scaled convolution”](https://doi.org/10.1364/AO.48.004310),
+   *Applied Optics* **48**, 4310–4319 (2009).
