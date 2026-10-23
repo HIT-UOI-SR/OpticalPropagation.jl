@@ -164,7 +164,7 @@ using FFTW
         @test Base.summarysize(coordinates(small)) == Base.summarysize(coordinates(large))
     end
 
-    @testset "Propagation metadata without numerical kernel changes" begin
+    @testset "Propagation metadata" begin
         for dims in ((4, 6), (5, 3))
             input = MonoLightField2D([complex(i, -j) for i in 1:dims[1], j in 1:dims[2]];
                 wavelength=633u"nm", size=(0.1u"mm", 0.08u"mm"), center=(1u"mm", -2u"mm"))

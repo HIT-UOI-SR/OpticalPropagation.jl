@@ -3,6 +3,12 @@
 
 calculate the propagation light field based on the angular spectrum.
 
+The input and output use the same uniformly sampled periodic window. Spatial
+frequencies follow FFT order for both odd and even sample counts. Nonpropagating
+components (`(λ*fx)^2 + (λ*fy)^2 > 1`) are suppressed for nonzero distances,
+including backward propagation. Zero distance returns an independent complex copy.
+`d` must be finite; `λ`, `lx` and `ly` must be finite and positive.
+
 ## Arguments
 
 - `Uin::AbstractArray{<:Number,2}`: Complex array of input complex amplitude.
@@ -16,10 +22,23 @@ calculate the propagation light field based on the angular spectrum.
 - `::Array{<:Number,2}`: Complex amplitude data after propagation.
 """
 function angularspectrum(Uin::AbstractArray{<:Number,2}, d::Real, λ::Real, lx::Real, ly::Real)
-    (n, m) = size(Uin)
-    ua = (-n/2:n/2-1)/lx*λ
-    va = (-m/2:m/2-1)/ly*λ
-    ifft(fft(Uin).*ifftshift([1.0-u^2-v^2>=0.0 ? exp(2im*pi*d/λ*sqrt(1.0-u^2-v^2)) : 0.0+0.0im for u in ua, v in va]))
+    n, m = _propagation_grid(Uin, d, λ, lx, ly)
+    spectrum = Matrix{ComplexF64}(Uin)
+    d == 0 && return spectrum
+    fft!(spectrum)
+    fx, fy = fftfreq(n, n/lx), fftfreq(m, m/ly)
+    carrier = cispi(2*d/λ)
+    for j in 1:m, i in 1:n
+        transverse = (λ*fx[i])^2 + (λ*fy[j])^2
+        if transverse <= 1
+            # sqrt(1-s)-1 = -s/(1+sqrt(1-s)) avoids cancellation near DC.
+            relative_phase = -2*d/λ * transverse/(1 + sqrt(1 - transverse))
+            spectrum[i, j] *= carrier * cispi(relative_phase)
+        else
+            spectrum[i, j] = 0
+        end
+    end
+    ifft!(spectrum)
 end
 
 

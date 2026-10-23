@@ -129,4 +129,5 @@ using RecipesBase
     end
     include("fresnelkirchhoff.jl")
     include("coordinates.jl")
+    include("propagation_numerics.jl")
 end

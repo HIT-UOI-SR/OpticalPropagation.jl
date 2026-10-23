@@ -14,16 +14,84 @@ Here are some useful optical propagation methods.
 The light-field interfaces preserve `gridcenter(field)` for angular-spectrum,
 double-FFT Fresnel, single-FFT Fresnel and planar Fresnel–Kirchhoff propagation.
 The output window follows the input centre. Single-FFT Fresnel updates the
-physical widths using its existing sampling relation; the other planar methods
-preserve the widths. The low-level matrix APIs and numerical kernels are unchanged.
-The existing single-FFT negative-distance convention (signed output widths) also
-remains unchanged; coordinate ranges follow those signed widths.
+physical widths using its sampling relation; the other planar methods preserve
+the widths. Single-FFT widths are positive for either propagation direction,
+so negative distances no longer reverse the output coordinate axes.
+
+All three planar FFT methods accept finite signed distances, finite positive
+wavelengths and input widths, and nonempty one-based matrices. At zero distance
+they return an independent complex copy on the original grid. The matrix
+interfaces retain their original signatures and return conventions.
 
 Finite-radius Fresnel–Kirchhoff propagation currently requires a zero-centred
 window. It rejects nonzero centres because the existing surface weights and
 geometry checks assume coordinates about the optical axis. Off-axis spherical
 propagation needs a separate numerical extension. Centred spherical windows
 continue to scale by `1 + d/radius`.
+
+## FFT frequency grids
+
+Angular-spectrum and double-FFT Fresnel propagation apply transfer functions in
+the native FFT frequency order. For an axis with `N` samples over a width `L`,
+this is `fftfreq(N, N/L)`, including the zero-frequency sample for odd sizes.
+The spatial coordinates still follow the existing half-open window convention.
+Frequency bins and spatial sample positions have separate roles; an odd spatial
+window does not imply a half-bin displacement of the frequency grid.
+
+These two propagators impose periodic boundaries on the input window. The angular
+spectrum transfer suppresses evanescent components for any nonzero distance,
+including backward propagation, rather than exponentially amplifying them.
+Consequently its forward/backward pair recovers only the propagating spectrum.
+The exact zero-distance identity retains all input components. Components exactly
+at the propagating cutoff are retained with zero longitudinal phase.
+
+See [AbstractFFTs' frequency and transform definitions](https://juliamath.github.io/AbstractFFTs.jl/stable/api/).
+
+## Single-FFT Fresnel propagation
+
+For nonzero distance, `fresnel1` evaluates the discrete Fresnel integral
+
+```math
+U_o(x_o,y_o) = \frac{e^{2\pi i d/\lambda}}{i\lambda d}\Delta x\Delta y
+\sum_{i,j} U_{i,j}\exp\left[\frac{i\pi}{\lambda d}
+\left((x_o-x_i)^2+(y_o-y_j)^2\right)\right].
+```
+
+The output has the same sample counts, with
+
+```math
+\Delta x_o = \frac{\lambda |d|}{N_x\Delta x},\qquad
+\Delta y_o = \frac{\lambda |d|}{N_y\Delta y},\qquad
+L_{x,o}=N_x\Delta x_o,\quad L_{y,o}=N_y\Delta y_o.
+```
+
+Input and output coordinates both start at their window centre minus half the
+corresponding width. The implementation includes the input and output quadratic
+phases and the phase associated with those coordinate origins. This applies to
+odd sizes and singleton dimensions as well as even grids. Both windows can be
+translated by the same centre without changing the result in their local coordinates.
+
+Positive distance uses a forward FFT; negative distance uses an unnormalised
+backward FFT with the corresponding phase and integral prefactor. Output widths
+remain positive in either case. The carrier phase is retained, so results can be
+compared as complex amplitudes, without adjusting an arbitrary constant phase.
+At zero distance the FFT sampling relation is bypassed and the input grid is kept.
+
+The method preserves the discrete power `sum(abs2, U) * Δx * Δy` under its natural
+output sampling. Physical accuracy still requires the input window and spacing
+to resolve the field and quadratic phase; no automatic resampling or aliasing
+correction is performed.
+
+```@example singlefft
+using OpticalPropagation, Unitful
+
+field = MonoLightField2D(ones(5, 4),
+    wavelength=633u"nm", size=(0.1u"mm", 0.08u"mm"),
+    center=(1u"mm", -2u"mm"))
+forward = fresnel1(field, 2u"mm")
+backward = fresnel1(forward, -2u"mm")
+all(>(0u"m"), physicalsize(forward)), gridcenter(forward), isapprox(backward, field)
+```
 
 ## Fresnel–Kirchhoff propagation
 
