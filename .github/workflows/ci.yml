@@ -58,6 +58,7 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: write
+      pages: write
     env:
       GKSwstype: '100'
     steps:
@@ -88,4 +89,9 @@ jobs:
         shell: julia --color=yes --project=docs {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+      # Pushes made with GITHUB_TOKEN do not trigger legacy Pages builds.
+      - name: Request GitHub Pages build
+        if: github.event_name == 'push'
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
