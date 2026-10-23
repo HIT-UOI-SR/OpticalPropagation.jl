@@ -87,24 +87,6 @@ using RecipesBase
         @test rec[1].args == (-0.5:0.25:0.25, -0.6:0.24:0.36, ones(4,5))
     end
     @testset "Scale Invariant Propagation: $p" for p in [angularspectrum, fresnel2]
-        @test begin # plane wave
-            λ=632.8e-9
-            lx=1.2e-3
-            ly=1e-3
-            d=1e-2
-            Uin = ones(ComplexF64, 1024, 768)
-            Uout = Uin*exp(2im*pi*d/λ)
-            p(Uin, d, λ, lx, ly)≈Uout
-        end
-        @test begin # plane wave
-            λ=632.8u"nm"
-            lx=1.2u"mm"
-            ly=1u"mm"
-            d=1u"cm"
-            Uin = MonoLightField2D(ones(ComplexF64, 1024, 768),wavelength=λ,size=(lx,ly))
-            Uout = Uin*exp(2im*pi*convert(Float64, d/λ))
-            p(Uin, d)≈Uout
-        end
         @test begin # distance superposition
             λ=632.8u"nm"
             lx=ly=1u"mm"
@@ -130,4 +112,5 @@ using RecipesBase
     include("fresnelkirchhoff.jl")
     include("coordinates.jl")
     include("propagation_numerics.jl")
+    include("propagation_patterns.jl")
 end
