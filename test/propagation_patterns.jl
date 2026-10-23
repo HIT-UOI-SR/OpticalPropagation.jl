@@ -27,7 +27,8 @@
         # nonparaxial methods approach this solution as λ/waist → 0;
         # λ/waist = 0.005 allows a 2e-5 relative field error here.
         methods = ((angularspectrum, 2e-5), (fresnel2, 1e-9),
-                   (fresnel1, 1e-9), (fresnelkirchhoff, 2e-5))
+                   (fresnel1, 1e-9), (fresnelkirchhoff, 2e-5),
+                   (rayleighsommerfeld, 2e-5))
         @testset "$propagate, z/zR = $factor" for (propagate, tolerance) in methods,
                                                 factor in (0.5, 1.0, 2.0)
             d = factor*rayleigh

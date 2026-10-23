@@ -21,12 +21,14 @@ export
     angularspectrum,
     fresnel2,
     fresnel1,
-    fresnelkirchhoff
+    fresnelkirchhoff,
+    rayleighsommerfeld
 
 include("lightfield2d.jl")
 include("angularspectrum.jl")
 include("fresnel.jl")
 include("fresnelkirchhoff.jl")
+include("rayleighsommerfeld.jl")
 include("utils.jl")
 
 end # module
