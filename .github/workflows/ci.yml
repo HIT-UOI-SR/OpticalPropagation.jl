@@ -1,64 +1,91 @@
 name: CI
+
 on:
-  - push
-  - pull_request
+  push:
+    branches: [master]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   test:
-    name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }} - ${{ github.event_name }}
+    name: Julia ${{ matrix.version }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    continue-on-error: ${{ matrix.version == 'nightly' }}
+    permissions:
+      contents: read
+      id-token: write
     strategy:
       fail-fast: false
       matrix:
-        version:
-          - '1.6'
-          - 'nightly'
-        os:
-          - ubuntu-latest
-          - macOS-latest
-          - windows-latest
-        arch:
-          - x64
+        version: ['1.10', '1']
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - version: 'nightly'
+            os: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: julia-actions/setup-julia@v1
+      - uses: actions/checkout@v7
+      - uses: julia-actions/setup-julia@v3
         with:
           version: ${{ matrix.version }}
-          arch: ${{ matrix.arch }}
-      - uses: actions/cache@v1
-        env:
-          cache-name: cache-artifacts
+      - uses: julia-actions/cache@v3
         with:
-          path: ~/.julia/artifacts
-          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-test-${{ env.cache-name }}-
-            ${{ runner.os }}-test-
-            ${{ runner.os }}-
+          delete-old-caches: 'false'
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1
+        with:
+          coverage: ${{ matrix.version == '1' && matrix.os == 'ubuntu-latest' }}
       - uses: julia-actions/julia-processcoverage@v1
-      - uses: codecov/codecov-action@v2
+        if: matrix.version == '1' && matrix.os == 'ubuntu-latest'
+      - uses: codecov/codecov-action@v7
+        if: matrix.version == '1' && matrix.os == 'ubuntu-latest'
         with:
           files: lcov.info
+          use_oidc: true
+          fail_ci_if_error: true
+
   docs:
     name: Documentation
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      GKSwstype: '100'
     steps:
-      - uses: actions/checkout@v2
-      - uses: julia-actions/setup-julia@v1
+      - uses: actions/checkout@v7
+      - uses: julia-actions/setup-julia@v3
         with:
           version: '1'
-      - run: |
-          julia --project=docs -e '
-            using Pkg
-            Pkg.develop(PackageSpec(path=pwd()))
-            Pkg.instantiate()'
-      - run: |
-          julia --project=docs -e '
-            using Documenter: doctest
-            using OpticalPropagation
-            doctest(OpticalPropagation)'
-      - run: julia --project=docs docs/make.jl
+      - uses: julia-actions/cache@v3
+        with:
+          delete-old-caches: 'false'
+      - name: Instantiate documentation environment
+        run: |
+          using Pkg
+          Pkg.develop(path=".")
+          Pkg.instantiate()
+        shell: julia --color=yes --project=docs {0}
+      - name: Build documentation and run doctests
+        run: julia --color=yes --project=docs docs/make.jl
+      - name: Deploy documentation
+        if: github.event_name == 'push'
+        run: |
+          using Documenter
+          deploydocs(;
+              root=joinpath(pwd(), "docs"),
+              repo="github.com/HIT-UOI-SR/OpticalPropagation.jl",
+              devbranch="master",
+          )
+        shell: julia --color=yes --project=docs {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
