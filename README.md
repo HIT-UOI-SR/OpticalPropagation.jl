@@ -26,8 +26,7 @@ julia --project=docs docs/make.jl
 ```
 
 Set `GKSwstype=100` when building documentation without a display. Documentation
-deployment runs separately in CI on pushes to `master` and version tags. It uses
-`GITHUB_TOKEN` to update `gh-pages` and explicitly requests a GitHub Pages build.
+deployment runs separately in CI on pushes to `master` and version tags.
 
 Package, test, and documentation environments declare their own compatibility
 bounds. Their generated manifests stay local so each supported Julia version can
