@@ -1,13 +1,18 @@
 # Explicit spatial quadrature: no FFT, lag indexing, or phase factorisation
 # from the implementation. Compare complex fields, including absolute phase.
-function rs_quadrature(U, d, λ, lx, ly; wx=ones(size(U, 1)), wy=ones(size(U, 2)))
+function rs_quadrature(U, d, λ, lx, ly; wx=ones(size(U, 1)), wy=ones(size(U, 2)),
+                       output_size=(lx, ly), output_samples=size(U))
     n, m = size(U)
     dx, dy, k = lx/n, ly/m, 2*(pi/λ)
     xs = [-lx/2 + (i-1)*dx for i in 1:n]
     ys = [-ly/2 + (j-1)*dy for j in 1:m]
-    result = zeros(ComplexF64, n, m)
-    for j in 1:m, i in 1:n, v in 1:m, u in 1:n
-        r = sqrt((xs[i]-xs[u])^2 + (ys[j]-ys[v])^2 + d^2)
+    nx, ny = output_samples
+    lxo, lyo = output_size
+    xo = [-lxo/2 + (i-1)*lxo/nx for i in 1:nx]
+    yo = [-lyo/2 + (j-1)*lyo/ny for j in 1:ny]
+    result = zeros(ComplexF64, nx, ny)
+    for j in 1:ny, i in 1:nx, v in 1:m, u in 1:n
+        r = sqrt((xo[i]-xs[u])^2 + (yo[j]-ys[v])^2 + d^2)
         result[i, j] += U[u, v]*wx[u]*wy[v]*d/(2pi) *
                         exp(im*k*r)*(1-im*k*r)/r^3 * dx*dy
     end

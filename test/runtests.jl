@@ -111,6 +111,7 @@ using RecipesBase
     end
     include("fresnelkirchhoff.jl")
     include("rayleighsommerfeld.jl")
+    include("rayleighsommerfeld_scaled.jl")
     include("coordinates.jl")
     include("propagation_numerics.jl")
     include("propagation_patterns.jl")
