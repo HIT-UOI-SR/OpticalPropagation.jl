@@ -4,7 +4,7 @@ using Documenter
 makedocs(;
     modules=[OpticalPropagation],
     authors="Yong-an Lu <miroox@outlook.com>",
-    repo="https://github.com/HIT-UOI-SR/OpticalPropagation.jl/blob/{commit}{path}#L{line}",
+    repo=Documenter.Remotes.GitHub("HIT-UOI-SR", "OpticalPropagation.jl"),
     sitename="OpticalPropagation.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
